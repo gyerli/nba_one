@@ -1,1 +1,0 @@
-cat lnd.sql | grep -Ev '\-\-|SEQUENCE|CREATE INDEX|ADD CONSTRAINT"|START WITH|INCREMENT BY|MINVALUE|MAXVALUE|CACHE 1|_unnamed' | grep -v -e '^$' > new.sql
