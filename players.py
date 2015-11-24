@@ -16,6 +16,8 @@ season_type = str()
 job_detail_name = str()
 dt_str = str()
 
+#Adding comment 11/24/2015
+
 
 def pull_player_shot_log_detail(measure_api, measure_type, measure_url):
     _df_shot_log = pd.DataFrame()
@@ -26,7 +28,7 @@ def pull_player_shot_log_detail(measure_api, measure_type, measure_url):
 
         playerLogger.debug('{0} - BASE_URL => {1}'.format(cmn.fn(), base_url))
         playerLogger.info('{0}/{1}/{2}/{3}/{4}'.format(player[0], player[3], season, job_detail_name, measure_type))
-
+		
         response = requests.get(base_url)
         data = json.loads(response.text)
 
