@@ -1,4 +1,25 @@
-﻿select
+﻿select 
+  public.hash8(pts.player_id::integer||'|'||replace(pts.season_id,'-','')::integer||'|'||pts.team_id) dim_player_guid,
+  (pts.player_id::integer||'|'||replace(pts.season_id,'-','')::integer||'|'||pts.team_id) crc_str,
+  pts.player_id::integer player_id,
+  pts.team_id , 
+  t.team_abbrv team_abbrv, 
+  replace(pts.season_id,'-','')::integer season,
+  trim(trim(split_part(pa.display_last_comma_first,',',2)) || ' ' || trim(split_part(pa.display_last_comma_first,',',1))) player_name
+from lnd.vw_players p
+left outer join stg.vw_player_team_season pts on (pts.player_id = p.player_id and 
+				     pts.team_id = p.teamid and
+				     pts.season_id = p.l_season)
+left outer join lnd.vw_teams t on (pts.team_id = t.team_id)									 
+left outer join lnd.vw_players_all pa on (pts.player_id = pa.person_id)
+where 1=1
+--and pts.player_id=1626204
+and pa.playercode not like '%HISTADD%'
+order by player_id
+;
+
+
+select
   t.dim_player_guid,
   t.crc_str,
   t.player_id,
