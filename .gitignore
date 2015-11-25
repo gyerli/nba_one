@@ -215,5 +215,5 @@ pip-log.txt
 .mr.developer.cfg
 
 .idea
-.pyc
 __pycache__/
+.xml
