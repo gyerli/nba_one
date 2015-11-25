@@ -120,7 +120,7 @@ def pull_players_new(measure_url):
         base_url = base_url.replace('^season_type^', season_type)
 
         getTeamRosterLogger.debug('{0} - BASE_URL => {1}'.format(cmn.fn(),base_url))
-        getTeamRosterLogger.info(team[0] + '/' + season + '/' + job_detail_name)
+        getTeamRosterLogger.info(str(player[0]) + '/' + season + '/' + job_detail_name)
 
         response = requests.get(base_url)
         data = json.loads(response.text)

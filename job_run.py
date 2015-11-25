@@ -322,7 +322,7 @@ conn = pg.connect(database="nba", user="ictsh", password="gyerli", host="127.0.0
 rootLogger = logging.getLogger('job_run')
 rootLogger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-fh = logging.FileHandler("{0}/log/job_run.log".format(cmn.nba_home))
+fh = logging.FileHandler("{0}job_run.log".format(cmn.log_folder))
 fh.setLevel(logging.DEBUG)
 # create console handler with a higher log level
 ch = logging.StreamHandler()
