@@ -7,7 +7,7 @@ select
   p.first_name,
   p.last_name,
   p.rosterstatus
-from tmp.player_info p
+from tmp.player_info p 
 --where person_id = 201571
 ),
 update_deactv as
