@@ -172,6 +172,6 @@ def main(p_measures, p_teams, p_players, p_season, p_season_type, p_dt_str):
         elif measure_seq == 4:
             pull_player_career(measure_url)
         elif measure_seq == 5:
-            pull_players_new(measure_url) 
+            pull_players_new(measure_url)
         else:
             getTeamRosterLogger.error('Error:No measure stat found')

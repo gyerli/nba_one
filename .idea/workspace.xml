@@ -30,9 +30,17 @@
       <file leaf-file-name="get_team_roster.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/get_team_roster.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state vertical-scroll-proportion="0.0">
               <caret line="151" column="31" selection-start-line="151" selection-start-column="31" selection-end-line="151" selection-end-column="31" />
               <folding />
+=======
+            <state vertical-scroll-proportion="0.8537666">
+              <caret line="174" column="41" selection-start-line="174" selection-start-column="41" selection-end-line="174" selection-end-column="41" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+>>>>>>> c0056883cc1375af589015f93f4959f7ee99e9ea
             </state>
           </provider>
         </entry>
@@ -179,6 +187,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="recentsLimit" value="5" />
     <property name="restartRequiresConfirmation" value="true" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -442,7 +451,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="0" y="23" width="1440" height="897" extended-state="0" />
+=======
+    <frame x="-12" y="-12" width="2544" height="1634" extended-state="6" />
+>>>>>>> c0056883cc1375af589015f93f4959f7ee99e9ea
     <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16180556" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -836,6 +849,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/get_team_roster.py">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state vertical-scroll-proportion="0.0">
           <caret line="151" column="31" selection-start-line="151" selection-start-column="31" selection-end-line="151" selection-end-column="31" />
           <folding />
@@ -847,6 +861,13 @@
         <state vertical-scroll-proportion="6.4787097">
           <caret line="456" column="72" selection-start-line="456" selection-start-column="72" selection-end-line="456" selection-end-column="72" />
           <folding />
+=======
+        <state vertical-scroll-proportion="0.8537666">
+          <caret line="174" column="41" selection-start-line="174" selection-start-column="41" selection-end-line="174" selection-end-column="41" />
+          <folding>
+            <element signature="e#0#10#0" expanded="true" />
+          </folding>
+>>>>>>> c0056883cc1375af589015f93f4959f7ee99e9ea
         </state>
       </provider>
     </entry>
