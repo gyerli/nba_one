@@ -9,7 +9,7 @@
   fgt.opp_team_abbrv,
   gp.player_id, 
   gp.player_name,
-  p.player_name,
+  p.display_first_last,
   fgt.matchup,
   replace(gp.season,'-','')::integer season,
   CASE 
@@ -44,8 +44,9 @@
   FROM lnd.vw_game_player_stat gp
     left outer join rpt.fct_game_team fgt on ( gp.game_id = fgt.game_id and
 											   gp.team_id = fgt.team_id )
-    left outer join rpt.dim_player p on ( gp.player_id = p.id and 
-									      replace(gp.season,'-','')::integer = p.season)											   
-where gp.game_id = '0021400001'
-  and gp.player_id = 2422
+    left outer join rpt.dim_player p on ( gp.player_id = p.id )
+where 1=1
+--  and gp.game_id = '0021400001'
+  and gp.player_id = 203487
+order by game_date desc  
 limit 100  
