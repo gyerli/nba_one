@@ -1,13 +1,13 @@
 ﻿with new_values as
 (
 select 
-  public.hash8(p.person_id|| '|' || now()) dim_player_guid,
-  p.person_id|| '|' || now() crc_str,
-  p.person_id id,
-  p.first_name,
-  p.last_name,
-  p.display_first_last,
-  p.display_last_comma_first,
+  public.hash8(a.person_id|| '|' || now()) dim_player_guid,
+  a.person_id|| '|' || now() crc_str,
+  a.person_id id,
+  coalesce(p.first_name, trim(split_part(a.display_last_comma_first,',',2))) first_name, 
+  coalesce(p.last_name, trim(split_part(a.display_last_comma_first,',',1))) last_name,
+  coalesce(p.display_first_last, trim(split_part(a.display_last_comma_first,',',2)) || ' ' || trim(split_part(a.display_last_comma_first,',',1)) ) display_first_last,
+  coalesce(p.display_last_comma_first, a.display_last_comma_first) display_last_comma_first,
   p.display_fi_last,
   p.birthdate,
   p.school,
@@ -26,15 +26,17 @@ select
   p.team_abbreviation team_abbrv,
   p.team_code,
   p.team_city,
-  p.playercode,
-  p.from_year,
-  p.to_year,
+  coalesce(p.playercode, a.playercode) playercode,
+  coalesce(p.from_year, a.from_year) from_year,
+  coalesce(p.to_year, a.to_year) to_year,
   p.dleague_flag,
-  p.games_played_flag
-from lnd.vw_player_info p 
+  coalesce(p.games_played_flag, a.games_played_flag) games_played_flag
+from lnd.vw_players_all a
+left outer join lnd.vw_player_info p on ( a.person_id = p.person_id ) 
 left outer join lnd.vw_fd_players fd on (p.display_first_last = fd.first_name || ' ' || fd.last_name)
 left outer join lnd.vw_dk_players dk on (p.display_first_last = dk.name)
---where person_id = 201571
+WHERE a.person_id in (select player_id 
+	                FROM lnd.vw_game_player_stat )
 ),
 update_deactv as
 (

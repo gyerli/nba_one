@@ -115,7 +115,7 @@ SELECT
   
 FROM lnd.vw_games t
 	INNER JOIN lnd.vw_games rt ON ( t.game_id = rt.game_id and
-									rt.team_id != t.team_id)
+					rt.team_id != t.team_id)
 
 	left outer JOIN rpt.dim_game dg ON ( t.game_id = dg.ID )
 	left outer JOIN rpt.dim_team dt ON ( t.team_id = dt.ID ) 
@@ -135,7 +135,6 @@ upsert as
 (
 UPDATE rpt.fct_game_team gt
    SET 
-	fct_game_team_guid = nv.fct_game_team_guid,
 	crc_str = nv.crc_str,
 	dim_game_guid = nv.dim_game_guid,
 	game_id = nv.game_id,

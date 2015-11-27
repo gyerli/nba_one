@@ -86,7 +86,7 @@ FROM
                                                              ps.season      = tla_c.season AND 
                                                              ps.loc         = tla_c.team_game_location)
   LEFT OUTER JOIN ( SELECT p1.teamid, p1.season, sum(po1.min) sm_min
-                      FROM lnd.vw_fd_players fp1 
+                      FROM lnd.vw_fd_players fp1    
                         inner join lnd.vw_players p1 ON (p1.player = fp1.first_name || ' ' || fp1.last_name)
                         INNER JOIN lnd.vw_player_overall_base po1 ON (p1.player_id  = po1.playerid AND 
                                                                      p1.season     = split_part(po1.season,'-',1)::int8 )
