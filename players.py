@@ -457,8 +457,10 @@ def main(p_measures, p_teams, p_players, p_season, p_season_type, p_dt_str):
         is_measure_active = measure[5]
 
         if not is_measure_active:
-          playerLogger.warn('Measure is not active. Continuing other measures')
+          playerLogger.warn('Measure is NOT ACTIVE. Continuing other measures')
           continue
+        else:
+          playerLogger.warn('Measure is ACTIVE')
         
         if measure_stat >= 2 and int(season.split('-')[0]) < 2013:
             playerLogger.warn('This measure is not available before 2013-14 season. Continuing other measures')
