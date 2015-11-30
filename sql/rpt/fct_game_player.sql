@@ -24,6 +24,7 @@ SELECT
     WHEN gp.season_type = 'Pre+Season' THEN 'PS'
     ELSE 'U'
   end::varchar season_type,
+  p.nba_pos,
   gp.start_position, 
   gp.comment cmnt, 
   gp.min,
@@ -192,6 +193,7 @@ display_first_last      = nv.display_first_last,
 matchup                 = nv.matchup,
 season                  = nv.season,
 season_type             = nv.season_type,
+nba_pos          		= nv.nba_pos,
 start_position          = nv.start_position,
 cmnt                    = nv.cmnt,
 min                     = nv.min,
@@ -312,7 +314,7 @@ returning gp.*
 INSERT INTO rpt.fct_game_player(
             fct_game_player_guid, crc_str, game_id, dim_game_guid, game_date, team_id, dim_team_guid, team_abbrv, 
             opp_team_id, dim_opp_team_guid, opp_team_abbrv, player_id, dim_player_guid, player_name, display_first_last, 
-            matchup, season, season_type, start_position, cmnt, min, seconds, 
+            matchup, season, season_type, nba_pos, start_position, cmnt, min, seconds, 
             fgm, fga, fg_pct, fg3m, fg3a, fg3_pct, ftm, fta, ft_pct, oreb, 
             dreb, reb, ast, stl, blk, tov, pf, pts, plus_minus, off_rating, 
             def_rating, net_rating, ast_pct, ast_tov, ast_ratio, oreb_pct, 
@@ -332,7 +334,7 @@ INSERT INTO rpt.fct_game_player(
             is_active)
 SELECT fct_game_player_guid, crc_str, game_id, dim_game_guid, game_date, team_id, dim_team_guid, team_abbrv, 
        opp_team_id, dim_opp_team_guid, opp_team_abbrv, player_id, dim_player_guid, player_name, display_first_last, 
-       matchup, season, season_type, start_position, cmnt, min, seconds, 
+       matchup, season, season_type, nba_pos, start_position, cmnt, min, seconds, 
        fgm, fga, fg_pct, fg3m, fg3a, fg3_pct, ftm, fta, ft_pct, oreb, 
        dreb, reb, ast, stl, blk, tov, pf, pts, plus_minus, off_rating, 
        def_rating, net_rating, ast_pct, ast_tov, ast_ratio, oreb_pct, 
