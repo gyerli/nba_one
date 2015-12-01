@@ -1,5 +1,6 @@
 ﻿SELECT gp.game_id,
 	gp.game_date,
+	lnd.get_revious_game_date(pa.season, gp.player_id, gp.game_date) ary,
 	gp.team_id,
 	gp.team_abbrv,
 	gp.opp_team_id,
