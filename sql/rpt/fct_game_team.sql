@@ -9,6 +9,7 @@ SELECT
   dt.dim_team_guid::BIGINT, 
   t.team_id,
   t.team_abbreviation team_abbrv,
+  lnd.get_loc_from_matchup(t.team_abbreviation, t.matchup) team_loc,
   dot.dim_team_guid::BIGINT dim_opp_team_guid, 
   rt.team_id opp_team_id,
   rt.team_abbreviation opp_team_abbrv,
@@ -21,10 +22,7 @@ SELECT
     WHEN t.season_type = 'Pre+Season' THEN 'PS'
     ELSE 'U'
   END::VARCHAR season_type,  
-  CASE 
-    WHEN t.wl = 'W' THEN 'H'
-    ELSE 'R'
-  END::VARCHAR WL,
+  t.wl,
   t.MIN minutes,
   t.fgm 		   fgm, 		
   t.fga        fga, 
@@ -142,6 +140,7 @@ UPDATE rpt.fct_game_team gt
 	dim_team_guid = nv.dim_team_guid,
 	team_id = nv.team_id,
 	team_abbrv = nv.team_abbrv,
+	team_loc = nv.team_loc,
 	dim_opp_team_guid = nv.dim_opp_team_guid,
 	opp_team_id = nv.opp_team_id,
 	opp_team_abbrv = nv.opp_team_abbrv,
@@ -240,7 +239,7 @@ returning gt.*
 )
 INSERT INTO rpt.fct_game_team(
             fct_game_team_guid, crc_str, dim_game_guid, game_id, matchup, 
-            dim_team_guid, team_id, team_abbrv, dim_opp_team_guid, opp_team_id, opp_team_abbrv, 
+            dim_team_guid, team_id, team_abbrv, team_loc, dim_opp_team_guid, opp_team_id, opp_team_abbrv, 
             game_date, dim_season_guid, season, season_type, wl, minutes, 
             fgm, fga, fg_pct, fg3m, fg3a, fg3_pct, ftm, fta, ft_pct, oreb, 
             dreb, reb, ast, stl, blk, tov, pf, pts, plus_minus, off_rating, 
@@ -255,7 +254,7 @@ INSERT INTO rpt.fct_game_team(
             tchs, sast, ftast, pass, cfgm, cfga, cfg_pct, ufgm, ufga, ufg_pct, 
             dfgm, dfga, dfg_pct, created_at, updated_at, is_active)
 SELECT fct_game_team_guid, crc_str, dim_game_guid, game_id, matchup, 
-       dim_team_guid, team_id, team_abbrv, dim_opp_team_guid, opp_team_id, opp_team_abbrv, 
+       dim_team_guid, team_id, team_abbrv, team_loc, dim_opp_team_guid, opp_team_id, opp_team_abbrv, 
        game_date, dim_season_guid, season, season_type, wl, minutes, 
        fgm, fga, fg_pct, fg3m, fg3a, fg3_pct, ftm, fta, ft_pct, oreb, 
        dreb, reb, ast, stl, blk, tov, pf, pts, plus_minus, off_rating, 
