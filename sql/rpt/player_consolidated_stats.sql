@@ -8,6 +8,7 @@ b.player_id,
 b.player_name,
 b.nba_pos,
 b.game_date,
+b.season,
 b.player_days_rest,
 b.team_abbrv team,
 b.opp_team_abbrv opp_team,
@@ -25,10 +26,19 @@ b.pie_season,
 b.moving_avg_pie,
 coalesce(dr_adv.pie, b.pie_game) rest_pie,
 b.loc_pie,
+
 b.opp_w_pct,
 b.opp_off_rating,
 b.opp_def_rating,
-b.opp_net_rating            
+b.opp_net_rating,
+
+opp_def.d_fgm,
+opp_def.d_fga,
+opp_def.d_fg_pct,
+opp_def.normal_fg_pct,
+opp_def.pct_plusminus
+
+            
 from
 (
  SELECT a.player_id,
@@ -65,7 +75,6 @@ from
     a.loc_mins,
     a.loc_fdpts,
     a.loc_pie
-
 
    FROM ( SELECT gp.game_id,
             gp.game_date,
@@ -114,9 +123,10 @@ from
                                                                      gp.team_loc = ploc_adv.group_value )									
 
           WHERE gp.seconds > 0
-          and gp.season = 201516
-          and gp.player_name = 'Kawhi Leonard'
-          ORDER BY gp.game_date) a
+          
+          --and gp.season = 201516
+          --and gp.player_name = 'Kawhi Leonard'
+          ) a
 ) b
 LEFT OUTER JOIN lnd.vw_player_days_rest_base dr_base ON (b.player_id = dr_base.playerid AND 
                                                          b.season = replace(dr_base.season,'-','')::integer AND 
@@ -124,6 +134,27 @@ LEFT OUTER JOIN lnd.vw_player_days_rest_base dr_base ON (b.player_id = dr_base.p
 LEFT OUTER JOIN lnd.vw_player_days_rest_advanced dr_adv ON (b.player_id = dr_adv.playerid AND 
                                                             b.season = replace(dr_adv.season,'-','')::integer AND 
                                                             dr_adv.group_value = b.player_days_rest)
-                                                         
-  
+left join ( 
+	select 
+	pd.season,
+	p.team_abbrv,
+	p.team_id,
+	p.nba_pos,
+	round(avg(pd.d_fgm)::numeric,3) d_fgm,
+	round(avg(pd.d_fga)::numeric,3) d_fga,
+	round(avg(pd.d_fg_pct)::numeric,3) d_fg_pct,
+	round(avg(pd.normal_fg_pct)::numeric,3) normal_fg_pct,
+	round(avg(pd.pct_plusminus)::numeric,3) pct_plusminus
+	from lnd.vw_player_defense pd
+	  inner join rpt.dim_player p on (pd.playerid = p.id)
+	where defense_category = 'Overall'
+	and p.team_abbrv is not null
+	group by 
+	pd.season,
+	p.team_abbrv,
+	p.team_id,
+	p.nba_pos ) opp_def on ( b.season = replace(opp_def.season,'-','')::INTEGER and
+	                         b.opp_team_id = opp_def.team_id and
+	                         b.nba_pos = opp_def.nba_pos )
+where b.moving_avg_min >= 10
 ;
