@@ -12,6 +12,7 @@ import get_team_roster as mGetTeamRoster
 import get_games as mGetGames
 import players as mPlayers
 import games as mGames
+import get_rotowire as mRW
 
 
 def check_args(args):
@@ -459,6 +460,8 @@ for job_detail in job_details:
             mPlayers.main(measures, teams, players, g_season, g_season_type, dt_str)
         if g_job_name == 'games':
             mGames.main(measures, teams, games, g_season, g_season_type, dt_str)
+        if g_job_name == 'get_rotowire':
+            mRW.main(measures, teams, players, g_season, g_season_type, dt_str)
 
 
     except Exception as e:

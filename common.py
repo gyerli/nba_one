@@ -7,7 +7,7 @@ import sys
 
 # Global Variables
 # ================
-valid_job_names = ['teams', 'players', 'games', 'get_team_roster', 'get_games', 'get_schedule']
+valid_job_names = ['teams', 'players', 'games', 'get_team_roster', 'get_games', 'get_schedule','get_rotowire']
 valid_seasons = ['2015-16', '2014-15', '2013-14', '2012-13', '2011-12', '2010-11', '2009-10', '2008-09',
                  '2007-08', '2006-07', '2005-06']
 valid_season_types = ['P', 'R', 'O']

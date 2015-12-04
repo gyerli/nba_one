@@ -137,6 +137,30 @@ def pull_players_new(measure_url):
     _df_player.to_csv(cmn.data_folder + 'player_info_' + dt_str + '.' + season + '.dat', sep='|')
 
 
+def pull_players_rotowire(measure_url):
+    _df_player = pd.DataFrame()
+
+    for player in players:
+        base_url = measure_url.replace('^player_id^', str(player[1]))
+
+        getTeamRosterLogger.debug('{0} - BASE_URL => {1}'.format(cmn.fn(),base_url))
+        getTeamRosterLogger.info(str(player[0]) + '/' + season + '/' + job_detail_name)
+
+        response = requests.get(base_url)
+        data = json.loads(response.text)
+
+        player_data = data['PlayerRotowires']
+
+        df_player = pd.DataFrame(player_data)
+        df_player['season_type'] = season_type
+        df_player['season'] = season
+
+        _df_player = _df_player.append(df_player)
+
+    _df_player.to_csv(cmn.data_folder + 'player_rotowire_' + dt_str + '.' + season + '.dat', sep='|')
+
+
+
 def main(p_measures, p_teams, p_players, p_season, p_season_type, p_dt_str):
 
     global teams
@@ -173,5 +197,7 @@ def main(p_measures, p_teams, p_players, p_season, p_season_type, p_dt_str):
             pull_player_career(measure_url)
         elif measure_seq == 5:
             pull_players_new(measure_url)
+        elif measure_seq == 6:
+            pull_players_rotowire(measure_url)
         else:
             getTeamRosterLogger.error('Error:No measure stat found')
