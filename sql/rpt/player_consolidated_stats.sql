@@ -1,15 +1,28 @@
 ﻿-- Materialized View: rpt.mvw_fct_game_player
 
---DROP MATERIALIZED VIEW rpt.mvw_fct_game_player;
+DROP MATERIALIZED VIEW rpt.mvw_player_consolidated;
+--copy (select * from rpt.mvw_player_consolidated) to '/tmp/player_cons.csv' with delimiter '|' CSV header;
 
-
+create materialized view rpt.mvw_player_consolidated
+as
 select 
 b.player_id,
+b.game_id,
 b.player_name,
 b.nba_pos,
 b.game_date,
 b.season,
-b.player_days_rest,
+case 
+  when b.player_days_rest = '0 Days Rest' then '0-D'
+  when b.player_days_rest = '1 Days Rest' then '1-D'
+  when b.player_days_rest = '2 Days Rest' then '2-D'
+  when b.player_days_rest = '3 Days Rest' then '3-D'
+  when b.player_days_rest = '4 Days Rest' then '4-D'
+  when b.player_days_rest = '5 Days Rest' then '5-D'
+  when b.player_days_rest = '6+ Days Rest' then '6+D'
+  ELSE 'UNK'
+END player_dr,
+  
 b.team_abbrv team,
 b.opp_team_abbrv opp_team,
 b.team_loc,
@@ -108,6 +121,9 @@ from
 	    ploc.min loc_mins,
             ploc_adv.pie loc_pie
            FROM rpt.fct_game_player gp
+--              inner join rpt.dim_player p on ( gp.player_id = p.id and
+-- 					      p.is_active = true and
+-- 					      p.to_year >= 2015 )
 	     left join rpt.fct_game_team gt on ( gp.game_id = gt.game_id and
  					         gp.team_id = gt.team_id )
              LEFT JOIN lnd.vw_player_overall_advanced pa ON gp.player_id = pa.playerid AND gp.season = replace(pa.season::text, '-'::text, ''::text)::integer
