@@ -168,7 +168,8 @@ left outer join lnd.vw_game_player_trck_stat trck on ( gp.player_id = trck.playe
 left outer join lnd.vw_game_player_usage_stat gusg on ( gp.player_id = gusg.player_id and
 						 gp.team_id = gusg.team_id and
 						 gp.game_id = gusg.game_id )		 
---where 1=1
+where 1=1
+and gp.season = '2015-16'
 -- and gp.game_id = '0021300001'
 --  and gp.player_id = 203076
 --order by game_date desc  
