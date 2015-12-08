@@ -1,6 +1,7 @@
 ﻿with new_values 
 as
 (
+--played_games
 SELECT
   public.hash8(ht.game_id) dim_game_guid,
   ht.game_id crc_str,
@@ -30,6 +31,29 @@ FROM
     INNER JOIN lnd.vw_games rt ON ( ht.game_id = rt.game_id AND
                                     ht.team_id != rt.team_id AND
                                     rt.matchup like '%@%')
+union         
+--future games    
+select                        
+  public.hash8(gs.game_id) dim_game_guid,
+  gs.game_id crc_str,
+  gs.game_id id,
+  to_date(gs.game_date::text,'YYYYMMDD') game_date,
+  replace(gs.season,'-','')::integer season,
+  CASE 
+    WHEN gs.season_type = 'R' THEN 'RS'
+    ELSE 'U'
+  END season_type,  
+  format('%s vs. %s',gs.home_team_abbrv, gs.away_team_abbrv) matchup,
+  gs.home_team_id,
+  gs.home_team_abbrv,
+  gs.away_team_id road_team_id,
+  gs.away_team_abbrv road_team_abbrv,
+  NULL WL,
+  NULL ht_pts,
+  NULL rt_pts,
+  NULL minutes  
+from lnd.game_schedule gs
+where gs.game_id not in (select game_id from lnd.vw_games)
 ),
 upsert as
 (
