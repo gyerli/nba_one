@@ -1,20 +1,16 @@
 ﻿select 
-player,
-age,
+format('%s - %s (%s) - %s vs %s', fd_pos, player, team_abbrv, loc, opp_team_abbrv) player,
+--age,
 nba_pos,
-fd_pos,
-salary,
-fppg,
-injury,
-injury_det,
-rotowire_caption,
+split_part(salary::money::text,'.',1) salary,
+format('%s %s', case when injury = 'O' then 'OUT' else injury end,injury_det) injury_info,
 min_inj_dist,
-
-loc,
-team_abbrv,
-opp_team_abbrv,
-season_str,
+rotowire_caption,
+--loc,
+--opp_team_abbrv,
+--season_str,
 player_days_rest,
+fppg fan_duel_points,
 
 min_season_rank + min_pot_inj_rank + 
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
@@ -47,9 +43,8 @@ pie_rest_rank,
 opp_w_pct_rank,
 opp_def_rating_rank,
 
-pct_plusminus,
+--pct_plusminus,
 pct_plusminus_rank
-
 
 from
 (
@@ -190,7 +185,7 @@ left join ( select
 			listitemcaption, 
 			row_number() over (partition by playerid order by listitempubdate desc) rn 
 			from lnd.vw_player_rotowire) rw on ps.player_id = rw.playerid and rw.rn = 1
-where pb.min > 15
+where pb.min >= 5
 ) a
 where a.game_date = current_date 
 --and a.team_abbrv = 'PHX'
@@ -218,16 +213,16 @@ LEFT JOIN (
   GROUP BY pd.season, p.team_abbrv, p.team_id, fp1.position) opp_def ON b.season_str = opp_def.season AND b.opp_team_id = opp_def.team_id AND b.fd_pos = opp_def.position
 left join ( SELECT 
 		  p1.team_id, 
+		  p1.team_abbrv,
 		  fp1.position, 
 		  sum(po1.min) min_inj_dist
 		FROM lnd.vw_fd_players fp1    
 		inner join rpt.dim_player p1 ON (replace(upper(p1.first_name),'.','') = upper(fp1.first_name) and 
 										 p1.last_name = fp1.last_name and
 										 p1.is_active = true)
-		INNER JOIN lnd.vw_player_overall_base po1 ON (p1.id  = po1.playerid AND 
-													  po1.season = '2015-16' )
+		INNER JOIN lnd.vw_player_overall_base po1 ON (p1.id  = po1.playerid AND po1.season = '2015-16' )
 		WHERE (fp1.injury_indicator = 'O')
-		GROUP BY p1.team_id, fp1.position) team_inj on ( b.team_id = team_inj.team_id and b.fd_pos = team_inj.position )
+		GROUP BY p1.team_id, p1.team_abbrv, fp1.position) team_inj on ( b.team_id = team_inj.team_id and b.fd_pos = team_inj.position )
 where 1=1
 --and fd_pos is not null
 ) c
