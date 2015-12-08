@@ -1,0 +1,9 @@
+Variables;
+- Loc (Home/Road)
+- Days rest
+- Opp team stats (Offense/Defense)
+- Opp defense player stats (Offense/Defense)
+- Refree
+- Travel distance
+- Month
+- City
