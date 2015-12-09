@@ -5,7 +5,7 @@ import urllib
 
 
 url = 'https://api.fanduel.com/fixture-lists/13466/players'
-response = requests.get(url, auth=('gursoy@yerli.org','t1mBirti'))
+response = requests.get(url, auth=('gursoy@yerli.org',pwd)
 
 data = json.loads(response.text)
 
