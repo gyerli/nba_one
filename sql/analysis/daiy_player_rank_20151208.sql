@@ -16,13 +16,13 @@ min_season_rank + min_pot_inj_rank +
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank_pts,
 
 min_season_rank + ((-20/min_pot_inj_rank)+min_pot_inj_rank) + 
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank_pts,
 
 min_season_rank,
 min_pot_inj_rank,
@@ -189,7 +189,7 @@ left join ( select
 where pb.min >= 5
 
 ) a
-where a.game_date = current_date
+where a.game_date = current_date 
 --and a.team_abbrv = 'PHX'
 ) b
 LEFT JOIN lnd.vw_player_days_rest_base dr_base ON b.player_id = dr_base.playerid AND b.season_str = dr_base.season AND dr_base.group_value = b.player_days_rest
@@ -230,4 +230,4 @@ where 1=1
 ) c
 where 1=1
 --and team_abbrv = 'TOR'
-order by fd_pos,adj_tot_rank
+order by fd_pos,adj_tot_rank_pts
