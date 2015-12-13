@@ -16,13 +16,13 @@ min_season_rank + min_pot_inj_rank +
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank_pts,
 
 min_season_rank + ((-20/min_pot_inj_rank)+min_pot_inj_rank) + 
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank_pts,
 
 min_season_rank,
 min_pot_inj_rank,
@@ -153,8 +153,8 @@ ps.opponent opp_team_abbrv,
 ps.season_str,
 ps.season,
 
-ps.game_date game_date,
-to_date((lag(ps.game_date, 1) OVER (ORDER BY ps.season, ps.team_id, ps.player_id, ps.game_date))::TEXT,'YYYYMMDD') previous_game_date,
+ps.game_date,
+lag(ps.game_date, 1) OVER (ORDER BY ps.season, ps.team_id, ps.player_id, ps.game_date) previous_game_date,
 
 pb.min min_season,
 pb.ast * 1.5 + pb.reb * 1.2 + pb.pts + pb.stl * 2 + pb.blk * 2 - pb.tov fdpts_season,
@@ -172,22 +172,24 @@ tla_opp.off_rating AS opp_off_rating,
 tla_opp.def_rating AS opp_def_rating,
 tla_opp.net_rating AS opp_net_rating
 
-from rpt.mvw_player_schedule ps
-left join rpt.dim_player p on ps.player_id = p.id and p.is_active = true
-left JOIN lnd.vw_fd_players fp ON upper(ps.player) = replace(upper(fp.first_name),'.','') || ' ' || upper(fp.last_name)
-LEFT JOIN lnd.vw_player_overall_advanced pa ON ps.player_id = pa.playerid AND ps.season_str = pa.season
-LEFT JOIN lnd.vw_player_overall_base pb ON ps.player_id = pb.playerid AND ps.season_str = pb.season
-LEFT JOIN lnd.vw_player_location_base ploc ON ps.player_id = ploc.playerid AND ps.season_str = ploc.season AND ps.loc = ploc.group_value
-LEFT JOIN lnd.vw_player_location_advanced ploc_adv ON ps.player_id = ploc_adv.playerid AND ps.season_str = ploc_adv.season AND ps.loc = ploc_adv.group_value
-LEFT JOIN lnd.vw_team_general_location_advanced tla_opp ON ps.opponent_team_id = tla_opp.teamid AND ps.season_str = tla_opp.season AND ps.opp_loc = tla_opp.team_game_location
+
+from rpt.mvw_player_schedule ps 
+left join rpt.dim_player p on ps.player_id = p.id and p.is_active = true 
+left JOIN lnd.vw_fd_players fp ON upper(ps.player) = replace(upper(fp.first_name),'.','') || ' ' || upper(fp.last_name) 
+LEFT JOIN lnd.vw_player_overall_advanced pa ON ps.player_id = pa.playerid AND ps.season_str = pa.season 
+LEFT JOIN lnd.vw_player_overall_base pb ON ps.player_id = pb.playerid AND ps.season_str = pb.season 
+LEFT JOIN lnd.vw_player_location_base ploc ON ps.player_id = ploc.playerid AND ps.season_str = ploc.season AND ps.loc = ploc.group_value 
+LEFT JOIN lnd.vw_player_location_advanced ploc_adv ON ps.player_id = ploc_adv.playerid AND ps.season_str = ploc_adv.season AND ps.loc = ploc_adv.group_value 
+LEFT JOIN lnd.vw_team_general_location_advanced tla_opp ON ps.opponent_team_id = tla_opp.teamid AND ps.season_str = tla_opp.season AND ps.opp_loc = tla_opp.team_game_location 
 left join ( select 
 			playerid, 
 			listitemcaption, 
 			row_number() over (partition by playerid order by listitempubdate desc) rn 
 			from lnd.vw_player_rotowire) rw on ps.player_id = rw.playerid and rw.rn = 1
 where pb.min >= 5
+
 ) a
-where a.game_date = current_date
+where a.game_date = current_date 
 --and a.team_abbrv = 'PHX'
 ) b
 LEFT JOIN lnd.vw_player_days_rest_base dr_base ON b.player_id = dr_base.playerid AND b.season_str = dr_base.season AND dr_base.group_value = b.player_days_rest
@@ -228,4 +230,4 @@ where 1=1
 ) c
 where 1=1
 --and team_abbrv = 'TOR'
-order by fd_pos,adj_tot_rank
+order by fd_pos,adj_tot_rank_pts
