@@ -153,7 +153,7 @@ ps.opponent opp_team_abbrv,
 ps.season_str,
 ps.season,
 
-to_date(ps.game_date::Text, 'YYYYMMDD') game_date,
+ps.game_date game_date,
 to_date((lag(ps.game_date, 1) OVER (ORDER BY ps.season, ps.team_id, ps.player_id, ps.game_date))::TEXT,'YYYYMMDD') previous_game_date,
 
 pb.min min_season,
