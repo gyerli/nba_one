@@ -16,13 +16,13 @@ min_season_rank + min_pot_inj_rank +
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + pct_plusminus_rank tot_rank_pts,
 
 min_season_rank + ((-20/min_pot_inj_rank)+min_pot_inj_rank) + 
 fdpts_season_rank + usg_pct_season_rank + pie_season_rank + 
 min_loc_rank + fdpts_loc_rank + usg_pct_loc_rank + pie_loc_rank + 
 min_rest_rank + fdpts_rest_rank + usg_pct_rest_rank + pie_rest_rank + 
-opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank,
+opp_w_pct_rank + opp_def_rating_rank + ((-20/pct_plusminus_rank)+pct_plusminus_rank) adj_tot_rank_pts,
 
 min_season_rank,
 min_pot_inj_rank,
@@ -230,4 +230,4 @@ where 1=1
 ) c
 where 1=1
 --and team_abbrv in ('NYK','UTA','ORL','PHX','ATL','DAL')
-order by fd_pos,adj_tot_rank
+order by fd_pos,adj_tot_rank_pts

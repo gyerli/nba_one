@@ -127,8 +127,8 @@ FROM lnd.vw_games t
 														  tff.team_id = t.team_id )
 	left outer JOIN lnd.vw_game_team_scoring_stat tsc ON ( tsc.game_id = t.game_id AND
 													  tsc.team_id = t.team_id )                          
-	left outer JOIN lnd.vw_game_team_trck_stat trck ON ( trck.game_id = t.game_id AND
-													trck.team_id = t.team_id )                                                        
+	left outer JOIN lnd.vw_game_team_trck_stat trck ON ( trck.game_id = t.game_id AND trck.team_id = t.team_id ) 
+where t.season = '2015-16'
 ),
 upsert as
 (
