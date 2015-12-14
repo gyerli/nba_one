@@ -229,5 +229,5 @@ where 1=1
 --and fd_pos is not null
 ) c
 where 1=1
---and team_abbrv = 'TOR'
+--and team_abbrv in ('NYK','UTA','ORL','PHX','ATL','DAL')
 order by fd_pos,adj_tot_rank
