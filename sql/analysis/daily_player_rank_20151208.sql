@@ -189,7 +189,7 @@ left join ( select
 where pb.min >= 5
 
 ) a
-where a.game_date = current_date 
+where a.game_date = current_date
 --and a.team_abbrv = 'PHX'
 ) b
 LEFT JOIN lnd.vw_player_days_rest_base dr_base ON b.player_id = dr_base.playerid AND b.season_str = dr_base.season AND dr_base.group_value = b.player_days_rest
