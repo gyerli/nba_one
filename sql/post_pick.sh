@@ -12,3 +12,4 @@ With delimiter '|'
 CSV 
   HEADER;
 EOF
+echo /home/gursoy/work/h2o-3.6.0.8/data/player_pick_${DATE}.csv is written
