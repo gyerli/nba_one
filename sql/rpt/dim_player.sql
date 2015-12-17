@@ -4,6 +4,7 @@ select
   public.hash8(a.person_id|| '|' || now()) dim_player_guid,
   a.person_id|| '|' || now() crc_str,
   a.person_id id,
+  fp.id fd_id,
   coalesce(p.first_name, trim(split_part(a.display_last_comma_first,',',2))) first_name, 
   coalesce(p.last_name, trim(split_part(a.display_last_comma_first,',',1))) last_name,
   coalesce(p.display_first_last, trim(split_part(a.display_last_comma_first,',',2)) || ' ' || trim(split_part(a.display_last_comma_first,',',1)) ) display_first_last,
@@ -18,7 +19,7 @@ select
   p.season_exp,
   p.jersey,
   p.position nba_pos,
-  fd.position fd_pos,
+  fp.position fd_pos,
   dk.position dk_pos,
   p.rosterstatus,
   p.team_id,
@@ -33,7 +34,8 @@ select
   coalesce(p.games_played_flag, a.games_played_flag) games_played_flag
 from lnd.vw_players_all a
 left outer join lnd.vw_player_info p on ( a.person_id = p.person_id ) 
-left outer join lnd.vw_fd_players fd on (p.display_first_last = fd.first_name || ' ' || fd.last_name)
+left JOIN lnd.vw_fd_players fp ON 
+	replace(upper(coalesce(p.display_first_last, trim(split_part(a.display_last_comma_first,',',2)) || ' ' || trim(split_part(a.display_last_comma_first,',',1)) )),'.','') = replace(upper(fp.first_name),'.','') || ' ' || upper(fp.last_name) 
 left outer join lnd.vw_dk_players dk on (p.display_first_last = dk.name)
 WHERE a.person_id in (select player_id 
 	                FROM lnd.vw_game_player_stat )
@@ -48,7 +50,8 @@ set
 from new_values nv
 where da.id = nv.id
 and da.is_active = true
-and (da.first_name <>                 nv.first_name OR 
+and (da.fd_id <>					  nv.fd_id OR
+	 da.first_name <>                 nv.first_name OR 
 	 da.last_name <>                  nv.last_name OR 
 	 da.display_first_last <>         nv.display_first_last OR 
 	 da.display_last_comma_first <>   nv.display_last_comma_first OR 
@@ -78,13 +81,13 @@ and (da.first_name <>                 nv.first_name OR
 returning da.*
 )
 INSERT INTO rpt.dim_player(
-            dim_player_guid, crc_str, id, first_name, last_name, display_first_last, 
+            dim_player_guid, crc_str, id, fd_id, first_name, last_name, display_first_last, 
             display_last_comma_first, display_fi_last, birthdate, school, 
             country, last_affiliation, height, weight, season_exp, jersey, 
             nba_pos, fd_pos, dk_pos, rosterstatus, team_id, team_name, team_abbrv, 
             team_code, team_city, playercode, from_year, to_year, dleague_flag, games_played_flag, 
             created_at, updated_at, is_active, start_date, end_date)
-SELECT dim_player_guid, crc_str, id, first_name, last_name, display_first_last, 
+SELECT dim_player_guid, crc_str, id, fd_id, first_name, last_name, display_first_last, 
    display_last_comma_first, display_fi_last, birthdate, school, 
    country, last_affiliation, height, weight, season_exp, jersey, 
    nba_pos, fd_pos, dk_pos, rosterstatus, team_id, team_name, team_abbrv, 
@@ -95,7 +98,7 @@ where not exists ( select 1
 		             from rpt.dim_player dp
 		            where dp.id = new_values.id )
 union
-SELECT dim_player_guid, crc_str, id, first_name, last_name, display_first_last, 
+SELECT dim_player_guid, crc_str, id, fd_id, first_name, last_name, display_first_last, 
    display_last_comma_first, display_fi_last, birthdate, school, 
    country, last_affiliation, height, weight, season_exp, jersey, 
    nba_pos, fd_pos, dk_pos, rosterstatus, team_id, team_name, team_abbrv, 
