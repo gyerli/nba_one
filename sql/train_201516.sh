@@ -6,3 +6,5 @@ With delimiter '|'
 CSV 
   HEADER;
 EOF
+echo training file for 2015-16 is written
+echo /home/gursoy/work/h2o-3.6.0.8/data/player_train_201516.csv

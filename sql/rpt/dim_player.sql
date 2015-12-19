@@ -4,7 +4,7 @@ select
   public.hash8(a.person_id|| '|' || now()) dim_player_guid,
   a.person_id|| '|' || now() crc_str,
   a.person_id id,
-  fp.id fd_id,
+  coalesce(fp.id, fpx.id) fd_id,
   coalesce(p.first_name, trim(split_part(a.display_last_comma_first,',',2))) first_name, 
   coalesce(p.last_name, trim(split_part(a.display_last_comma_first,',',1))) last_name,
   coalesce(p.display_first_last, trim(split_part(a.display_last_comma_first,',',2)) || ' ' || trim(split_part(a.display_last_comma_first,',',1)) ) display_first_last,
@@ -19,7 +19,7 @@ select
   p.season_exp,
   p.jersey,
   p.position nba_pos,
-  fp.position fd_pos,
+  coalesce(fp.position,fpx.POSITION) fd_pos,
   dk.position dk_pos,
   p.rosterstatus,
   p.team_id,
@@ -34,8 +34,11 @@ select
   coalesce(p.games_played_flag, a.games_played_flag) games_played_flag
 from lnd.vw_players_all a
 left outer join lnd.vw_player_info p on ( a.person_id = p.person_id ) 
+left join stg.xlat_player xp on (p.person_id = xp.player_id )
 left JOIN lnd.vw_fd_players fp ON 
 	replace(upper(coalesce(p.display_first_last, trim(split_part(a.display_last_comma_first,',',2)) || ' ' || trim(split_part(a.display_last_comma_first,',',1)) )),'.','') = replace(upper(fp.first_name),'.','') || ' ' || upper(fp.last_name) 
+left JOIN lnd.vw_fd_players fpx ON 
+	upper(xp.src_name) = replace(upper(fpx.first_name),'.','') || ' ' || upper(fpx.last_name) 
 left outer join lnd.vw_dk_players dk on (p.display_first_last = dk.name)
 WHERE a.person_id in (select player_id 
 	                FROM lnd.vw_game_player_stat )
