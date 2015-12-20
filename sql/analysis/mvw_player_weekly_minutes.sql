@@ -1,6 +1,6 @@
 ﻿-- drop view rpt.vw_player_weekly_minutes;
--- create or replace view rpt.vw_player_weekly_minutes
--- as
+create or replace materialized view rpt.mvw_player_weekly_minutes
+as
 select
 distinct
 a.season,
