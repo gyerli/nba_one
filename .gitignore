@@ -218,3 +218,6 @@ pip-log.txt
 __pycache__/
 .xml
 .rattle
+
+# Data Files
+*.csv

@@ -3,7 +3,6 @@
 # Then this table will extracted and fed into H2O ML module
 DATE=`date +%Y%m%d`
 echo $DATE
-
 psql -U ictsh -d nba <<EOF
 \x
 DROP TABLE IF EXISTS picks.predict_${DATE};

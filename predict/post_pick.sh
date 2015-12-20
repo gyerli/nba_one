@@ -3,13 +3,13 @@
 # This file is run to extract that table to be fed to H2O ML model
 DATE=`date +%Y%m%d`
 echo $DATE
-
+DATA_FILE=${PWD}/data/player_pick_${DATE}.csv
 psql -U ictsh -d nba <<EOF
 \x
 copy (select * from picks.predict_$DATE) 
-to '/home/gursoy/work/h2o-3.6.0.8/data/player_pick_${DATE}.csv'
+to '${DATA_FILE}'
 With delimiter '|'
 CSV 
   HEADER;
 EOF
-echo /home/gursoy/work/h2o-3.6.0.8/data/player_pick_${DATE}.csv is written
+echo ${DATA_FILE} is written
