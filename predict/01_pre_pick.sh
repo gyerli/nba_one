@@ -8,7 +8,6 @@ psql -U ictsh -d nba <<EOF
 DROP TABLE IF EXISTS picks.predict_${DATE};
 CREATE TABLE picks.predict_${DATE} AS
 SELECT * FROM ml.vw_predict
-WHERE game_date = current_date
 --and player not in ('Beno Udrih','James Ennis','Mario Chalmers','Jarnell Stokes')
 ;
 ALTER TABLE picks.predict_${DATE}
