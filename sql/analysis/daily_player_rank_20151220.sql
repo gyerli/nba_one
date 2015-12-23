@@ -215,11 +215,10 @@ LEFT JOIN (
     round(avg(pb.min/1+pd.normal_fg_pct)::numeric, 3) AS normal_fg_pct,
     round(avg(pb.min/1+pd.pct_plusminus)::numeric, 3) AS pct_plusminus
    FROM lnd.vw_player_defense pd
-     JOIN rpt.dim_player p ON pd.playerid = p.id
+     JOIN rpt.dim_player p ON pd.playerid = p.id and p.is_active = true
      left outer join lnd.vw_player_overall_base pb on (pd.playerid = pb.playerid and pd.season = pb.season)
      left join lnd.vw_fd_players fp1 on (replace(upper(p.first_name),'.','') = upper(fp1.first_name) and 
-										 p.last_name = fp1.last_name and
-										 p.is_active = true)
+										 p.last_name = fp1.last_name )
   WHERE pd.defense_category = 'Overall' 
     AND p.team_abbrv IS NOT NULL
   GROUP BY pd.season, p.team_abbrv, p.team_id, fp1.position) opp_def ON b.season_str = opp_def.season AND b.opp_team_id = opp_def.team_id AND b.fd_pos = opp_def.position
